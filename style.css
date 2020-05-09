@@ -43,6 +43,16 @@ canvas{
     transform: scale(0.97);
 }
 
+ #scoreCard{
+    padding-left: 10px;
+    padding-bottom: 5px;
+} 
+
+.container{
+    display: inline-flex;
+    float: left;
+}
+
 .rules-btn{
     position: absolute;
     left: 40px;
@@ -65,4 +75,7 @@ canvas{
 
 .rules.show{
     transform: translateX(0);
+    
 }
+
+

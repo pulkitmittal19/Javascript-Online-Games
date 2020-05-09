@@ -48,7 +48,7 @@
       x: canvas.width / 2,
       y: canvas.height / 2,
       size: 10,
-      speed: 4,
+      speed: 5,
       dx: 4,
       dy: -4
   }
@@ -59,7 +59,7 @@
       y:canvas.height - 20,
       w: 110,
       h: 12,
-      speed: 5,
+      speed: 8,
       dx:0
 
   }
@@ -92,7 +92,7 @@
 function drawBall(){
     ctx.beginPath();
     ctx.arc(ball.x, ball.y, ball.size, 0, Math.PI * 2);
-    ctx.fillStyle = '#0095dd';
+    ctx.fillStyle = '#ff0000';
     ctx.fill();
     ctx.closePath();
 }
@@ -122,62 +122,92 @@ function drawBricks(){
 
 // Move paddle on canvas
 
-function movePaddle(){
-    paddle.x += paddle.dx;
+
+    function movePaddle(){
+        paddle.x += paddle.dx;
 
 
-    if(paddle.x + paddle.w > canvas.width){
-        paddle.x  = canvas.width - paddle.w - 10;
-    }
-
-    if(paddle.x < 0){
-        paddle.x = 10;
-    }
-}
-
-function moveBall(){
-    ball.x += ball.dx;
-    ball.y += ball.dy;
-
-    // Wall collison for ball
-    if(ball.x + ball.size > canvas.width || ball.x - ball.size < 0){
-        ball.dx *= -1; 
-    }
-
-    if(ball.y + ball.size > canvas.height || ball.y - ball.size < 0){
-        ball.dy *= -1; 
-    }
-
-
-    // Paddle collision
-    if(
-        ball.x - ball.size > paddle.x &&
-        ball.x  + ball.size < paddle.x + paddle.w &&
-        ball.y + ball.size > paddle.y)
-        {
-            ball.dy = -ball.speed;
+        if(paddle.x + paddle.w > canvas.width){
+            paddle.x  = canvas.width - paddle.w - 10;
         }
 
-    // Bricks collison
-    bricks.forEach(column => {
-        column.forEach(brick => {
-          if (brick.visible) {
-            if (
-              ball.x - ball.size > brick.x && // left brick side check
-              ball.x + ball.size < brick.x + brick.w && // right brick side check
-              ball.y + ball.size > brick.y && // top brick side check
-              ball.y - ball.size < brick.y + brick.h // bottom brick side check
-            ) {
-              ball.dy *= -1;
-              
-              brick.visible = false;
-    
-              
+        if(paddle.x < 0){
+            paddle.x = 10;
+        }
+    }
+
+    function moveBall(){
+        ball.x += ball.dx;
+        ball.y += ball.dy;
+
+        // Wall collison for ball
+        if(ball.x + ball.size > canvas.width || ball.x - ball.size < 0){
+            ball.dx *= -1; 
+        }
+
+        if(ball.y + ball.size > canvas.height || ball.y - ball.size < 0){
+            ball.dy *= -1; 
+        }
+
+
+        // Paddle collision
+        if(
+            ball.x - ball.size > paddle.x &&
+            ball.x  + ball.size < paddle.x + paddle.w &&
+            ball.y + ball.size > paddle.y)
+            {
+                ball.dy = -ball.speed;
             }
-          }
+
+        // Bricks collison
+        bricks.forEach(column => {
+            column.forEach(brick => {
+            if (brick.visible) {
+                if (
+                ball.x - ball.size > brick.x && // left brick side check
+                ball.x + ball.size < brick.x + brick.w && // right brick side check
+                ball.y + ball.size > brick.y && // top brick side check
+                ball.y - ball.size < brick.y + brick.h // bottom brick side check
+                ) {
+                ball.dy *= -1;
+                
+                brick.visible = false;
+                increaseScore();
+                
+                }
+            }
+            });
         });
-      });
+
+        if(ball.y + ball.size > canvas.height){
+            showAllBricks();
+            console.log(score);
+            $("#scoreCard").text(score);
+            score = 0;
+            ball.x = canvas.width / 2 ;
+            ball.y = canvas.height / 2 + 100; 
+            
+            alert('Game over!!!! Try again')
+        }
+    }
+
+// Increase score
+function increaseScore(){
+    score++;
+
+    if(score  === 84){
+        alert("Congratulations!!!!!  You completed this game")
+        showAllBricks();
+    }
+
 }
+
+function showAllBricks(){
+    bricks.forEach(column =>{
+        column.forEach(brick => brick.visible = true)
+    })
+}
+
 
 
 function draw(){
@@ -206,7 +236,10 @@ function update(){
     requestAnimationFrame(update);
 }
 
-update();
+
+    update();
+
+
 
 
 // Keydown event
