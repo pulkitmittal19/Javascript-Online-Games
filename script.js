@@ -1,4 +1,3 @@
-    
 // Using Javascript   (YOU CAN DO THIS WITH JS ALSO AND WITH JQUERY ALSO)
     const rulesBtn = document.getElementById("rules-btn");
     const closeBtn = document.getElementById("close-btn");
@@ -26,6 +25,3 @@
     // $('#close-btn').click(()=>{
     //     $('#rules').removeClass('show')
     // });
-
-
-    
